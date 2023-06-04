@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # ----------------------------------------------
-# --- Author         : Pranjal(20190211), Prabhav(2019021100), Swaraj(2019021155)
+# --- Author         : Pranjal(2019021104), Prabhav(2019021100), Swaraj(2019021155)
 # --- Date           : 23th March 2023
 # ----------------------------------------------
 
@@ -51,7 +51,7 @@ fps = int(cap.get(cv2.CAP_PROP_FPS))
 
 total_passed_vehicle = 0  # using it to count vehicles
 
-# By default I use an "SSD with Mobilenet" model here. See the detection model zoo (https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
+# By default we use an "SSD with Mobilenet" model here. See the detection model zoo (https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
 # What model to download.
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
 MODEL_FILE = MODEL_NAME + '.tar.gz'
@@ -71,13 +71,13 @@ NUM_CLASSES = 90
 # Load a (frozen) Tensorflow model into memory.
 detection_graph = tf.Graph()
 with detection_graph.as_default():
-    od_graph_def = tf.GraphDef()
-    with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
-    #od_graph_def = tf.compat.v1.GraphDef() # use this line to run it with TensorFlow version 2.x
-    #with tf.compat.v2.io.gfile.GFile(PATH_TO_CKPT, 'rb') as fid: # use this line to run it with TensorFlow version 2.x
-        serialized_graph = fid.read()
-        od_graph_def.ParseFromString(serialized_graph)
-        tf.import_graph_def(od_graph_def, name='')
+#od_graph_def = tf.GraphDef()
+    with tf.io.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
+        od_graph_def = tf.compat.v1.GraphDef() # use this line to run it with TensorFlow version 2.x
+        with tf.compat.v2.io.gfile.GFile(PATH_TO_CKPT, 'rb') as fid: # use this line to run it with TensorFlow version 2.x
+            serialized_graph = fid.read()
+            od_graph_def.ParseFromString(serialized_graph)
+            tf.import_graph_def(od_graph_def, name='')
 
 # Loading label map
 # Label maps map indices to category names, so that when our convolution network predicts 5, we know that this corresponds to airplane. Here I use internal utility functions, but anything that returns a dictionary mapping integers to appropriate string labels would be fine
@@ -107,7 +107,7 @@ def object_detection_function(command):
         output_movie = cv2.VideoWriter(source_video.split(".")[0]+'_output.avi', fourcc, fps, (width, height))
 
     with detection_graph.as_default():
-        with tf.Session(graph=detection_graph) as sess:
+        with tf.compat.v1.Session(graph=detection_graph) as sess:
         #with tf.compat.v1.Session(graph=detection_graph) as sess: # use this line to run it with TensorFlow version 2.x
 
             # Definite input and output Tensors for detection_graph
