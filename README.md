@@ -12,3 +12,4 @@ Here our model uses Computer vision and ML algorithms to detect vehicles in CCTV
 ### Working:
 ![project](https://github.com/Swaraj-ji/street_vision/assets/68496595/5099a833-a71d-4ca2-a7c6-2e7ad5d0bc51)
 
+For more information read the project report: [Report](https://drive.google.com/file/d/1PUfV_RjwziHA_XIynR2WKembmSerHifW/view?usp=sharing).
